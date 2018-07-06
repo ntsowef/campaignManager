@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>SMS Portal</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	 <link rel="stylesheet" type="text/css" href="./jquery.datetimepicker.css"/>
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/emm.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+
+	
+	
+<script type="text/javascript">
+	
+		//Edit the counter/limiter value as your wish
+		var count = "160";   //Example: var count = "175";
+		function limiter(){
+		var tex = document.myform.message.value;
+		var len = tex.length;
+		if(len > count){
+				tex = tex.substring(0,count);
+				document.myform.message.value =tex;
+				return false;
+		}
+		document.myform.limit.value = count-len;
+		}
+
+		function check_length(my_form)
+	        {
+				maxLen = 150; // max number of characters allowed
+				if (my_form.Message.value.length >= maxLen) {
+		// Alert message if maximum limit is reached. 
+		// If required Alert can be removed. 
+		var msg = "You have reached your maximum limit of characters allowed";
+		alert(msg);
+				// Reached the Maximum length so trim the textarea
+					my_form.Message.value = my_form.Message.value.substring(0, maxLen);
+				 }
+				else{ // Maximum length not reached so update the value of my_text counter
+					my_form.text_num.value = maxLen - my_form.Message.value.length;}
+		}
+		// +,- delete
+		var r={'special':/[\W]/g}
+		function valid(o,w)
+		{
+		  o.value = o.value.replace(r[w],'');
+		}
+
+		// phone number checker
+		function isNumeric()
+		{
+		  var elem=document.myform.to.value;
+		  var nalt=document.getElementById('phno1');
+		 if(elem!="")
+		 {
+			var numericExpression = /^[0-9]+$/;
+			  if(elem.match(numericExpression))
+			{
+				 nalt.innerHTML="";
+				 return true;
+			   }
+			
+			else{
+				
+			nalt.innerHTML="<font size=1 > Numbers Only</font>";
+				  document.myform.to.focus();
+				  document.myform.to.value="";
+			   return false;
+			  }
+		  }
+		  else if(elem.length==0)  {
+			nalt.innerHTML="<font size=1 > Enter Numbers</font>";
+			 document.myform.to.focus();;
+		   return false;
+			}
+		}
+
+		function disablefield(){ 
+		   if (document.getElementById('yes_radio').checked == 1){ 
+			  document.getElementById('datetimepicker').disabled=''; 
+			  document.getElementById('datetimepicker').value=''; }
+		   else{
+			   document.getElementById('datetimepicker').disabled='disabled'; 
+			 // document.getElementById('datetimepicker').value='Allowed'; } }
+			   
+
+
+		var checkboxes = $("input[type='checkbox']"),
+			submitButt = $("input[type='file']");
+
+		checkboxes.click(function() {
+			submitButt.attr("disabled", !checkboxes.is(":checked"));
+		});
+</script>
+    
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head> 
+  <body>
+    <!--main container-->
+    <div id="main_container">
+      
+     
+        <!--end banner-->
+        <div>
+        	<h2>SMS Portal <small>Create Campaign</small></h2>
+        </div>
+        
+        <!--list of cases-->
+        <div>
+            <form name="myform" action="bulk_groupmsgs_send.php" method="post" enctype="multipart/form-data" class="js-ajax-php-json" >
+            	<table style="padding-bottom: 20px">
+				
+				
+				   <tr>
+            			<td>Campaign Name: </td>
+            			<td><input type="text" placeholder="Campaign Name" name="campaing_name" class="form-control"/></td>
+            		</tr>
+				
+            		<tr>
+                        <td>Customer Group: </td>
+                          <td>
+                    	    <select name="sms_group" class="form-control" id="sms_group_list">
+                        	<option>Select Customer Group</option>                                               
+                            </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Mercury Campaign: </td>
+                          <td>
+                    	    <select name="mercury_campaign" class="form-control" id="mercury_campaign">
+                        	<option>Select Mercury Campaign</option>
+                            </select>
+                        </td>
+                     </tr>
+
+                     <tr>
+                      <td width="38%" align="left" valign="top" class="content">Message:</td>
+                      <td width="306" align="left" valign="top" colspan="2"><textarea onkeypress="check_length(this.form);" class="form-control" onkeydown="check_length(this.form);" name="Message" rows="4" cols="39"></textarea></td>
+                    </tr> 
+                     
+                    <tr>
+                      <td align="left" valign="top" class="content">Count:</td>
+                      <td align="left" valign="top" colspan="2"> <input size="1" value="160" name="text_num"></td>
+                    </tr>
+                     
+                     <tr>
+		                  <td>Choose Date</td>
+		                   <td> 
+		                	<input type="radio" name="one" value="immediate">Immediately
+		                     <input type="radio" name="one" value="datetime" id="yes_radio" onchange="disablefield();">Date Time</td>
+                                   <td>
+		                     <input type="datetime" id="datetimepicker" name="schedule"/> 
+		                   </td>
+           			 </tr>
+            		
+            		
+            		
+            		<tr>
+            			<td></td>
+            			<td><input type="submit" name="submit" value="Save" class="btn btn-primary"> 
+						<input type="submit" name="back" value="Back" class="btn btn-primary"> 
+						<input type="reset" name="clear" value="Clear" class="btn btn-default"></td>
+            		</tr>
+            	</table>
+            </form>
+        </div>
+        <!--end list of cases-->
+        
+    </div>
+    <!--end main container-->
+
+      
+ 
+      
+    <!-- Modal Case Details -->
+  
+      <!--script src="./jquery.js"></script-->
+<script src="./jquery.datetimepicker.js"></script>
+<script>
+$('#datetimepicker').datetimepicker({
+dayOfWeekStart : 1,
+format:'Y-m-d H:i', 
+
+lang:'en',
+disabledDates:['1986/01/08','1986/01/09','1986/01/10'],
+startDate:	'1990-01-05'
+});
+</script>
+  </body>
+</html>
